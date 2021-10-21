@@ -37,7 +37,7 @@ dependencies:
       path: packages/firebase_crashlytics/firebase_crashlytics
       ref: 200b8ca8f1c452e4249fb791e53cc55e786ac768
   firebase_analytics: any
-  firebase_messaging: ^9.1.0
+  firebase_messaging: ^10.0.0
   firebase_core: ^1.0.2
   firebase_auth: ^1.0.1
   cloud_firestore: ^1.0.3
