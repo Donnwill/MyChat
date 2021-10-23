@@ -8,6 +8,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:my_chat/models/users.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends StatefulWidget {
   final Function loginOrRegister;
@@ -25,17 +26,70 @@ class _RegisterState extends State<Register> {
 
   CollectionReference users;
   Users usersData = Users();
-  final dateFormat = DateFormat("yyyy-MM-dd");
+  final dateFormat = DateFormat("dd-MM-yyyy");
 
   PhoneNumber number = PhoneNumber(isoCode: 'DE');
 
   addUsers(Users usersData) async {
-    users.add({
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString("Uid");
+
+    users.doc(uid).set({
       "userName": usersData.userName,
       "emailID": usersData.email,
       "phoneNumber": usersData.phoneNumber,
       "dateOfBirth": usersData.dateOfBirth
     });
+  }
+
+  showPopUp(String title, String content) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return FadeAnimation(
+            1.5,
+            AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+              title: FadeAnimation(1.5, Text(title)),
+              content: FadeAnimation(2, Text(content)),
+              buttonPadding: EdgeInsets.only(right: 25.0),
+              elevation: 18,
+              actions: [
+                FadeAnimation(
+                  2.5,
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          onPrimary: Color(0xff006699),
+                          shadowColor: Color(0xff006699),
+                          elevation: 18,
+                          padding: EdgeInsets.zero,
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                        widget.loginOrRegister(isRegister);
+                      },
+                      child: Ink(
+                        height: 40,
+                        width: 80,
+                        decoration: BoxDecoration(
+                            gradient: const LinearGradient(colors: [Color(0xff006699), Color(0xff00ccff)]),
+                            borderRadius: BorderRadius.circular(5)),
+                        child: Center(
+                          child: Text(
+                            "Ok",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                      )),
+                )
+              ],
+            ),
+          );
+        });
   }
 
   @override
@@ -295,15 +349,14 @@ class _RegisterState extends State<Register> {
               2,
               ElevatedButton(
                 onPressed: () async {
+                  
                   if (_formKey.currentState.validate()) {
                     bool shouldNavigate = await signUp(email, password);
                     FirebaseAnalytics().logSignUp(signUpMethod: "createUserWithEmailAndPassword");
                     if (shouldNavigate) {
                       await addUsers(usersData);
-                      print("Success");
-                    } else {
-                      print("Failed");
-                    }
+                      showPopUp("Successful", "You have successfully registered. Kindly login to continue.");
+                    } 
                   }
                 },
                 style: ElevatedButton.styleFrom(

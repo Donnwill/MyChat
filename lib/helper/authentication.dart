@@ -1,9 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> signIn(String email, String password) async {
   try {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
-
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var signInValue = await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: password);
+    prefs.setString("Uid", signInValue.user.uid);
     return true;
   } on FirebaseAuthException catch (error) {
     if (error.code == "wrong-password") {
@@ -18,7 +20,10 @@ Future<bool> signIn(String email, String password) async {
 
 Future<bool> signUp(String email, String password) async {
   try {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var signUpValue = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+    await prefs.setString("Uid", signUpValue.user.uid);
+
     return true;
   } on FirebaseAuthException catch (error) {
     if (error.code == "email-already-in-use") {
