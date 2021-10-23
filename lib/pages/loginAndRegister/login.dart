@@ -2,6 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat/helper/authentication.dart';
 import 'package:my_chat/helper/fade_animation.dart';
+import 'package:email_validator/email_validator.dart';
 
 class Login extends StatefulWidget {
   final Function loginOrRegister;
@@ -34,7 +35,7 @@ class _LoginState extends State<Login> {
                 child: const FadeAnimation(
                   2,
                   Text(
-                    "Login",
+                    "SignIn",
                     style: TextStyle(fontSize: 35, color: Colors.black87, letterSpacing: 2),
                   ),
                 )),
@@ -61,18 +62,20 @@ class _LoginState extends State<Login> {
                           margin: const EdgeInsets.only(left: 10),
                           child: TextFormField(
                             maxLines: 1,
+                            
                             decoration: const InputDecoration(
                               labelText: " E-mail ...",
+                             
                               border: InputBorder.none,
                             ),
                             onChanged: (emailId) {
                               email = emailId;
                             },
                             validator: (emailId) {
-                              if (emailId != "") {
+                              if (EmailValidator.validate(emailId)) {
                                 return null;
                               }
-                              return "enter a valid email";
+                              return " Enter a valid email";
                             },
                             keyboardType: TextInputType.emailAddress,
                           ),
@@ -98,13 +101,14 @@ class _LoginState extends State<Login> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.paste),
+                      Icon(Icons.vpn_key_outlined),
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(left: 10),
                           child: TextFormField(
                             maxLines: 1,
                             obscureText: true,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             decoration: const InputDecoration(
                               labelText: " Password ...",
                               border: InputBorder.none,
@@ -116,7 +120,7 @@ class _LoginState extends State<Login> {
                               if (passwordValue != "") {
                                 return null;
                               }
-                              return "enter a valid password";
+                              return " Enter a valid password";
                             },
                           ),
                         ),
@@ -139,7 +143,8 @@ class _LoginState extends State<Login> {
                     } else {
                       print("Failed");
                     }
-                  }
+                    
+                  } 
                 },
                 style: ElevatedButton.styleFrom(
                     onPrimary: Color(0xff006699),
@@ -156,7 +161,7 @@ class _LoginState extends State<Login> {
                     height: 50,
                     alignment: Alignment.center,
                     child: const Text(
-                      'Login',
+                      'SignIn',
                       style: TextStyle(
                         fontSize: 30,
                         color: Colors.white,
@@ -182,7 +187,7 @@ class _LoginState extends State<Login> {
                         print('Sign Up');
                         widget.loginOrRegister(isRegister);
                       },
-                      child: Text('Register Now'),
+                      child: Text('SignUp'),
                     )
                   ],
                 ),

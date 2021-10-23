@@ -52,6 +52,9 @@ dependencies:
   device_info: ^2.0.0
   google_sign_in: ^5.0.1
   simple_animations: ^2.5.1
+  email_validator: ^2.0.1
+  intl_phone_number_input: ^0.7.0+2
+  datetime_picker_formfield: ^2.0.0
 
 dev_dependencies:
   flutter_test:

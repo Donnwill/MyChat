@@ -1,7 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:my_chat/helper/authentication.dart';
 import 'package:my_chat/helper/fade_animation.dart';
+import 'package:email_validator/email_validator.dart';
+import 'package:my_chat/models/users.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 
 class Register extends StatefulWidget {
   final Function loginOrRegister;
@@ -16,6 +22,27 @@ class _RegisterState extends State<Register> {
   String password;
 
   bool isRegister = false;
+
+  CollectionReference users;
+  Users usersData = Users();
+  final dateFormat = DateFormat("yyyy-MM-dd");
+
+  PhoneNumber number = PhoneNumber(isoCode: 'DE');
+
+  addUsers(Users usersData) async {
+    users.add({
+      "userName": usersData.userName,
+      "emailID": usersData.email,
+      "phoneNumber": usersData.phoneNumber,
+      "dateOfBirth": usersData.dateOfBirth
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    users = FirebaseFirestore.instance.collection('users');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +61,7 @@ class _RegisterState extends State<Register> {
                 child: const FadeAnimation(
                   2,
                   Text(
-                    "Register",
+                    "SignUp",
                     style: TextStyle(fontSize: 35, color: Colors.black87, letterSpacing: 2),
                   ),
                 )),
@@ -43,7 +70,50 @@ class _RegisterState extends State<Register> {
               Container(
                   width: double.infinity,
                   height: 70,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xff006699), width: 1),
+                      boxShadow: const [
+                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
+                      ],
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Icon(Icons.person_outline),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: TextFormField(
+                            maxLines: 1,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
+                            decoration: const InputDecoration(
+                              labelText: " User Name",
+                              border: InputBorder.none,
+                            ),
+                            onChanged: (userName) {
+                              usersData.userName = userName;
+                            },
+                            validator: (userName) {
+                              if (userName != "") {
+                                return null;
+                              }
+                              return " Enter a valid user name";
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+            FadeAnimation(
+              2,
+              Container(
+                  width: double.infinity,
+                  height: 70,
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   decoration: BoxDecoration(
                       border: Border.all(color: Color(0xff006699), width: 1),
@@ -67,12 +137,13 @@ class _RegisterState extends State<Register> {
                             ),
                             onChanged: (emailId) {
                               email = emailId;
+                              usersData.email = emailId;
                             },
                             validator: (emailId) {
-                              if (emailId != "") {
+                              if (EmailValidator.validate(emailId)) {
                                 return null;
                               }
-                              return "enter a valid email";
+                              return " Enter a valid email";
                             },
                             keyboardType: TextInputType.emailAddress,
                           ),
@@ -86,7 +157,50 @@ class _RegisterState extends State<Register> {
               Container(
                   width: double.infinity,
                   height: 70,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xff006699), width: 1),
+                      boxShadow: const [
+                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
+                      ],
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: InternationalPhoneNumberInput(
+                            inputBorder: InputBorder.none,
+                            autoValidateMode: AutovalidateMode.onUserInteraction,
+                            onInputValidated: (bool isPhoneNumberValid) {
+                              if (isPhoneNumberValid) {
+                                return null;
+                              }
+                            },
+                            onInputChanged: (PhoneNumber number) {
+                              usersData.phoneNumber = number.phoneNumber;
+                            },
+                            selectorButtonOnErrorPadding: 0,
+                            selectorConfig: SelectorConfig(
+                              selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                            ),
+                            initialValue: number,
+                            keyboardType: TextInputType.numberWithOptions(signed: true, decimal: true),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+            FadeAnimation(
+              2,
+              Container(
+                  width: double.infinity,
+                  height: 70,
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                   padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
                   decoration: BoxDecoration(
                       border: Border.all(color: Color(0xff006699), width: 1),
@@ -98,13 +212,63 @@ class _RegisterState extends State<Register> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Icon(Icons.paste),
+                      const Icon(Icons.date_range_outlined),
+                      Expanded(
+                        child: Container(
+                          margin: const EdgeInsets.only(left: 10),
+                          child: DateTimeField(
+                            format: dateFormat,
+                            onShowPicker: (context, currentValue) {
+                              return showDatePicker(
+                                  context: context,
+                                  firstDate: DateTime(1900),
+                                  initialDate: currentValue ?? DateTime.now(),
+                                  lastDate: DateTime(2100));
+                            },
+                            decoration: const InputDecoration(
+                              labelText: " Date Of Birth",
+                              border: InputBorder.none,
+                            ),
+                            onChanged: (birthDate) {
+                              usersData.dateOfBirth = DateFormat("dd-MM-yyyy").format(birthDate).toString();
+                            },
+                            validator: (birthDate) {
+                              if (birthDate != null) {
+                                return null;
+                              }
+                              return " Enter a valid date of birth";
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
+            ),
+            FadeAnimation(
+              2,
+              Container(
+                  width: double.infinity,
+                  height: 70,
+                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Color(0xff006699), width: 1),
+                      boxShadow: const [
+                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
+                      ],
+                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.vpn_key_outlined),
                       Expanded(
                         child: Container(
                           margin: const EdgeInsets.only(left: 10),
                           child: TextFormField(
                             maxLines: 1,
                             obscureText: true,
+                            autovalidateMode: AutovalidateMode.onUserInteraction,
                             decoration: const InputDecoration(
                               labelText: " Password ...",
                               border: InputBorder.none,
@@ -116,7 +280,7 @@ class _RegisterState extends State<Register> {
                               if (passwordValue != "") {
                                 return null;
                               }
-                              return "enter a valid password";
+                              return " Enter a valid password";
                             },
                           ),
                         ),
@@ -135,6 +299,7 @@ class _RegisterState extends State<Register> {
                     bool shouldNavigate = await signUp(email, password);
                     FirebaseAnalytics().logSignUp(signUpMethod: "createUserWithEmailAndPassword");
                     if (shouldNavigate) {
+                      await addUsers(usersData);
                       print("Success");
                     } else {
                       print("Failed");
@@ -156,7 +321,7 @@ class _RegisterState extends State<Register> {
                     height: 50,
                     alignment: Alignment.center,
                     child: const Text(
-                      'Register',
+                      'SignUp',
                       style: TextStyle(
                         fontSize: 30,
                         color: Colors.white,
@@ -181,7 +346,7 @@ class _RegisterState extends State<Register> {
                       onPressed: () {
                         widget.loginOrRegister(isRegister);
                       },
-                      child: Text('Login'),
+                      child: Text('SignIn'),
                     )
                   ],
                 ),
