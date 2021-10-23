@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:my_chat/helper/authentication.dart';
 import 'package:my_chat/helper/fade_animation.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:my_chat/helper/routes.dart';
+import 'package:my_chat/pages/home_page.dart';
 
 class Login extends StatefulWidget {
   final Function loginOrRegister;
@@ -139,6 +141,10 @@ class _LoginState extends State<Login> {
                     bool shouldNavigate = await signIn(email, password);
                     FirebaseAnalytics().logLogin();
                     if (shouldNavigate) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
                       print("Success");
                     } else {
                       print("Failed");

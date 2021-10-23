@@ -8,6 +8,7 @@ import 'package:email_validator/email_validator.dart';
 import 'package:my_chat/models/users.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Register extends StatefulWidget {
   final Function loginOrRegister;
@@ -29,8 +30,13 @@ class _RegisterState extends State<Register> {
 
   PhoneNumber number = PhoneNumber(isoCode: 'DE');
 
+  
+
   addUsers(Users usersData) async {
-    users.add({
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String uid = prefs.getString("Uid");
+
+    users.doc(uid).set({
       "userName": usersData.userName,
       "emailID": usersData.email,
       "phoneNumber": usersData.phoneNumber,
