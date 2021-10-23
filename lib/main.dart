@@ -2,7 +2,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:my_chat/pages/home_page.dart';
+import 'package:my_chat/pages/loginAndRegister/login_register_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'helper/theme.dart';
@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   final _navigatorKey = GlobalKey<NavigatorState>();
   @override
   Widget build(BuildContext context) {
-    final theme = Provider.of<ThemeChanger>(context);
+    // final theme = Provider.of<ThemeChanger>(context);
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ThemeChanger>(
@@ -43,7 +43,7 @@ class _MyAppState extends State<MyApp> {
       child: Consumer<FirebaseAnalytics>(builder: (context, analytics, child) {
         return MaterialApp(
           title: 'Flutter Demo',
-          theme: buildThemeData(theme.getAppTheme()),
+          // theme: buildThemeData(theme.getAppTheme()),
           navigatorKey: _navigatorKey,
           debugShowCheckedModeBanner: false,
           navigatorObservers: [
@@ -52,7 +52,7 @@ class _MyAppState extends State<MyApp> {
               nameExtractor: analyticsNameExtractor,
             )
           ],
-          home: HomePage(title: 'Flutter Demo Home Page'),
+          home: LoginRegisterPage(),
         );
       }),
     );
