@@ -64,10 +64,8 @@ class _LoginState extends State<Login> {
                           margin: const EdgeInsets.only(left: 10),
                           child: TextFormField(
                             maxLines: 1,
-                            
                             decoration: const InputDecoration(
                               labelText: " E-mail ...",
-                             
                               border: InputBorder.none,
                             ),
                             onChanged: (emailId) {
@@ -137,20 +135,21 @@ class _LoginState extends State<Login> {
               2,
               ElevatedButton(
                 onPressed: () async {
-                  if (_formKey.currentState.validate()) {
-                    bool shouldNavigate = await signIn(email, password);
-                    FirebaseAnalytics().logLogin();
-                    if (shouldNavigate) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                      print("Success");
-                    } else {
-                      print("Failed");
-                    }
-                    
-                  } 
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                  // if (_formKey.currentState.validate()) {
+                  //   bool shouldNavigate = await signIn(email, password);
+                  //   FirebaseAnalytics().logLogin();
+                  //   if (shouldNavigate) {
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => HomePage()),
+                  //     );
+                  //     print("Success");
+                  //   } else {
+                  //     print("Failed");
+                  //   }
+
+                  // }
                 },
                 style: ElevatedButton.styleFrom(
                     onPrimary: Color(0xff006699),
