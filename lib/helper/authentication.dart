@@ -35,3 +35,14 @@ Future<bool> signUp(String email, String password) async {
     return false;
   }
 }
+
+Future<bool> signOut() async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await FirebaseAuth.instance.signOut();
+    await prefs.setString("Uid", "");
+    return true;
+  } catch (error) {
+    return false;
+  }
+}

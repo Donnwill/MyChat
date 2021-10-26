@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:my_chat/helper/authentication.dart';
 import 'package:my_chat/helper/fade_animation.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:my_chat/helper/routes.dart';
 import 'package:my_chat/pages/home_page.dart';
 
 class Login extends StatefulWidget {
@@ -64,10 +63,8 @@ class _LoginState extends State<Login> {
                           margin: const EdgeInsets.only(left: 10),
                           child: TextFormField(
                             maxLines: 1,
-                            
                             decoration: const InputDecoration(
                               labelText: " E-mail ...",
-                             
                               border: InputBorder.none,
                             ),
                             onChanged: (emailId) {
@@ -137,6 +134,7 @@ class _LoginState extends State<Login> {
               2,
               ElevatedButton(
                 onPressed: () async {
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
                   if (_formKey.currentState.validate()) {
                     bool shouldNavigate = await signIn(email, password);
                     FirebaseAnalytics().logLogin();
@@ -149,8 +147,8 @@ class _LoginState extends State<Login> {
                     } else {
                       print("Failed");
                     }
-                    
-                  } 
+
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                     onPrimary: Color(0xff006699),
