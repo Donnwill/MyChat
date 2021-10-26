@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat/helper/authentication.dart';
+import 'package:my_chat/models/users.dart';
 import 'package:my_chat/pages/loginAndRegister/login_register_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -8,9 +11,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Stream documentStream;
+  SharedPreferences prefs;
+  Users users;
+
+  String uid;
+  bool loading = true;
   @override
   void initState() {
+    getUserData();
     super.initState();
+  }
+
+  getUserData() async {
+    prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString("Uid");
+    print(uid);
+    setState(() {
+      documentStream = FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
+    });
   }
 
   PopupMenuItem popupMenuItemBuilder(IconData icon, String text, int value) {
@@ -21,21 +40,23 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(right: 8.0),
             child: Icon(
               icon,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
-          Text(text),
+          Text(
+            text,
+            style: TextStyle(color: Colors.white),
+          ),
         ],
       ),
       value: value,
     );
   }
 
-// Color(0xff006699), Color(0xff00ccff)
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(indicatorColor: Colors.white, tabs: [
@@ -47,6 +68,9 @@ class _HomePageState extends State<HomePage> {
             ),
             Tab(
               text: "FRIENDS",
+            ),
+            Tab(
+              text: "REQUESTS",
             )
           ]),
           actions: [
@@ -88,15 +112,28 @@ class _HomePageState extends State<HomePage> {
             decoration: BoxDecoration(gradient: LinearGradient(colors: <Color>[Color(0xff006699), Color(0xff00ccff)])),
           ),
         ),
-        body: Center(
-          child: TabBarView(
-              // mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[Text("Chats"), Text("Global"), Text("Friends")]
-              // TabBarView(children: [Text("data")]),
-              // TabBarView(children: [Text("data")])
+        body: StreamBuilder<DocumentSnapshot>(
+            stream: documentStream,
+            builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Container();
+              }
+              if (!snapshot.hasData) {
+                return Container();
+              }
 
-              ),
-        ),
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Container();
+              }
+
+              var value = snapshot.data;
+              users = Users.fromMap(value.data());
+
+              // print(users.friends);
+
+              return TabBarView(
+                  children: <Widget>[Text(users.phoneNumber), Text("Global"), Text("Friends"), Text("Requests")]);
+            }),
       ),
     );
   }
