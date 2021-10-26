@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_chat/helper/authentication.dart';
+import 'package:my_chat/pages/loginAndRegister/login_register_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -37,9 +39,12 @@ class _HomePageState extends State<HomePage> {
         actions: [
           PopupMenuButton(
               color: Color(0xff00ccff),
-              onSelected: (value) {
+              onSelected: (value) async {
                 if (value == 2) {
-                  //logOut
+                  bool shouldNavigate = await signOut();
+                  if (shouldNavigate) {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => LoginRegisterPage()));
+                  }
                 } else {
                   //navigate to user profile page
                 }

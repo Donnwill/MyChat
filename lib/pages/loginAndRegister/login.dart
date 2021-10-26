@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:my_chat/helper/authentication.dart';
 import 'package:my_chat/helper/fade_animation.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:my_chat/helper/routes.dart';
 import 'package:my_chat/pages/home_page.dart';
 
 class Login extends StatefulWidget {
@@ -135,21 +134,21 @@ class _LoginState extends State<Login> {
               2,
               ElevatedButton(
                 onPressed: () async {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
-                  // if (_formKey.currentState.validate()) {
-                  //   bool shouldNavigate = await signIn(email, password);
-                  //   FirebaseAnalytics().logLogin();
-                  //   if (shouldNavigate) {
-                  //     Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(builder: (context) => HomePage()),
-                  //     );
-                  //     print("Success");
-                  //   } else {
-                  //     print("Failed");
-                  //   }
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                  if (_formKey.currentState.validate()) {
+                    bool shouldNavigate = await signIn(email, password);
+                    FirebaseAnalytics().logLogin();
+                    if (shouldNavigate) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                      print("Success");
+                    } else {
+                      print("Failed");
+                    }
 
-                  // }
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                     onPrimary: Color(0xff006699),
