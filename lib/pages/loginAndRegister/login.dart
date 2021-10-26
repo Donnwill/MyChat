@@ -143,9 +143,9 @@ class _LoginState extends State<Login> {
                         context,
                         MaterialPageRoute(builder: (context) => HomePage()),
                       );
-                      print("Success");
+                      
                     } else {
-                      print("Failed");
+                     
                     }
 
                   }
