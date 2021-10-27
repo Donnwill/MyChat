@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               text: "FRIENDS",
             ),
             Tab(
-              text: "REQUESTS",
+              text: "REQUEST",
             )
           ]),
           actions: [

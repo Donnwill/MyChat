@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat/helper/fade_animation.dart';
 import 'package:my_chat/models/requests.dart';
+import 'package:my_chat/models/users.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RequestsTab extends StatefulWidget {
   final List<Requests> requestsList;
@@ -10,6 +13,55 @@ class RequestsTab extends StatefulWidget {
 }
 
 class _RequestsTabState extends State<RequestsTab> {
+  SharedPreferences prefs;
+  String uid;
+  Users currentUser;
+  DocumentSnapshot documentSnapshot;
+
+  acceptRequest(Requests friendRequest, Users currentUser) async {
+    CollectionReference users = FirebaseFirestore.instance.collection('users_friends');
+    CollectionReference requestedUser = FirebaseFirestore.instance.collection('users_friends');
+
+    users.doc(uid).update({
+      'friends': FieldValue.arrayUnion([
+        {
+          "userName": friendRequest.userName,
+          "phoneNumber": friendRequest.phoneNumber,
+          "userUid": friendRequest.userUid,
+          "profilePic": friendRequest.profilePic
+        }
+      ])
+    });
+
+    requestedUser.doc(friendRequest.userUid).update({
+      'friends': FieldValue.arrayUnion([
+        {
+          "userName": currentUser.userName,
+          "phoneNumber": currentUser.phoneNumber,
+          "userUid": uid,
+          "profilePic": currentUser.profilePic
+        }
+      ])
+    });
+  }
+
+  getUserData() async {
+    prefs = await SharedPreferences.getInstance();
+    uid = prefs.getString("Uid");
+    print(uid);
+    documentSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+
+    setState(() {
+      currentUser = Users.fromMap(documentSnapshot.data());
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getUserData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,7 +92,9 @@ class _RequestsTabState extends State<RequestsTab> {
                   Row(
                     children: [
                       ElevatedButton(
-                        onPressed: () async {},
+                        onPressed: () async {
+                          await acceptRequest(widget.requestsList[index], currentUser);
+                        },
                         style: ElevatedButton.styleFrom(
                             onPrimary: Color(0xff57C84D),
                             shadowColor: Color(0xff57C84D),

@@ -4,25 +4,25 @@ class Friends {
   String userName;
   String profilePic;
   String phoneNumber;
-  String uid;
+  String userUid;
   Friends({
     this.userName,
     this.profilePic,
     this.phoneNumber,
-    this.uid,
+    this.userUid,
   });
 
   Friends copyWith({
     String userName,
     String profilePic,
     String phoneNumber,
-    String uid,
+    String userUid,
   }) {
     return Friends(
       userName: userName ?? this.userName,
       profilePic: profilePic ?? this.profilePic,
       phoneNumber: phoneNumber ?? this.phoneNumber,
-      uid: uid ?? this.uid,
+      userUid: userUid ?? this.userUid,
     );
   }
 
@@ -31,7 +31,7 @@ class Friends {
       'userName': userName,
       'profilePic': profilePic,
       'phoneNumber': phoneNumber,
-      'uid': uid,
+      'userUid': userUid,
     };
   }
 
@@ -40,7 +40,7 @@ class Friends {
       userName: map['userName'],
       profilePic: map['profilePic'],
       phoneNumber: map['phoneNumber'],
-      uid: map['uid'],
+      userUid: map['userUid'],
     );
   }
 
@@ -50,22 +50,22 @@ class Friends {
 
   @override
   String toString() {
-    return 'Friends(userName: $userName, profilePic: $profilePic, phoneNumber: $phoneNumber, uid: $uid)';
+    return 'Friends(userName: $userName, profilePic: $profilePic, phoneNumber: $phoneNumber, userUid: $userUid)';
   }
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-
+  
     return other is Friends &&
-        other.userName == userName &&
+      other.userName == userName &&
         other.profilePic == profilePic &&
         other.phoneNumber == phoneNumber &&
-        other.uid == uid;
+      other.userUid == userUid;
   }
 
   @override
   int get hashCode {
-    return userName.hashCode ^ profilePic.hashCode ^ phoneNumber.hashCode ^ uid.hashCode;
+    return userName.hashCode ^ profilePic.hashCode ^ phoneNumber.hashCode ^ userUid.hashCode;
   }
 }
