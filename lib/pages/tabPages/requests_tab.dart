@@ -50,7 +50,6 @@ class _RequestsTabState extends State<RequestsTab> {
   getUserData() async {
     prefs = await SharedPreferences.getInstance();
     currentUsersUid = prefs.getString("Uid");
-    print(currentUsersUid);
     currentUsersSnapshot = await FirebaseFirestore.instance.collection('users').doc(currentUsersUid).get();
 
     setState(() {

@@ -188,7 +188,7 @@ class _LoginState extends State<Login> {
                         shadowColor: MaterialStateColor.resolveWith((states) => Color(0xff006699)),
                       ),
                       onPressed: () {
-                        print('Sign Up');
+
                         widget.loginOrRegister(isRegisterPageActive);
                       },
                       child: Text('SignUp'),
