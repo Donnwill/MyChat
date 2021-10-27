@@ -22,9 +22,9 @@ class _RegisterState extends State<Register> {
   String email;
   String password;
 
-  bool isRegister = false;
+  bool isRegisterPageActive = false;
 
-  CollectionReference users;
+  CollectionReference registerUser;
   Users usersData = Users();
   final dateFormat = DateFormat("dd-MM-yyyy");
 
@@ -34,7 +34,7 @@ class _RegisterState extends State<Register> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String uid = prefs.getString("Uid");
 
-    users.doc(uid).set({
+    registerUser.doc(uid).set({
       "userName": usersData.userName,
       "emailID": usersData.email,
       "phoneNumber": usersData.phoneNumber,
@@ -42,7 +42,7 @@ class _RegisterState extends State<Register> {
     });
   }
 
-  showPopUp(String title, String content) {
+  registrationSuccessPopUp(String title, String content) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -66,7 +66,7 @@ class _RegisterState extends State<Register> {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))),
                       onPressed: () {
                         Navigator.of(context).pop();
-                        widget.loginOrRegister(isRegister);
+                        widget.loginOrRegister(isRegisterPageActive);
                       },
                       child: Ink(
                         height: 40,
@@ -95,7 +95,7 @@ class _RegisterState extends State<Register> {
   @override
   void initState() {
     super.initState();
-    users = FirebaseFirestore.instance.collection('users');
+    registerUser = FirebaseFirestore.instance.collection('users');
   }
 
   @override
@@ -109,7 +109,6 @@ class _RegisterState extends State<Register> {
               height: 50,
             ),
             Container(
-                // color: Colors.red,
                 alignment: Alignment.topLeft,
                 margin: const EdgeInsets.only(left: 22, bottom: 20),
                 child: const FadeAnimation(
@@ -355,8 +354,11 @@ class _RegisterState extends State<Register> {
                     FirebaseAnalytics().logSignUp(signUpMethod: "createUserWithEmailAndPassword");
                     if (shouldNavigate) {
                       await addUsers(usersData);
-                      showPopUp("Successful", "You have successfully registered. Kindly login to continue.");
+                      registrationSuccessPopUp(
+                          "Successful", "You have successfully registered. Kindly login to continue.");
                     } 
+                  } else {
+                    //error handling here
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -397,7 +399,7 @@ class _RegisterState extends State<Register> {
                         shadowColor: MaterialStateColor.resolveWith((states) => Color(0xff006699)),
                       ),
                       onPressed: () {
-                        widget.loginOrRegister(isRegister);
+                        widget.loginOrRegister(isRegisterPageActive);
                       },
                       child: Text('SignIn'),
                     )

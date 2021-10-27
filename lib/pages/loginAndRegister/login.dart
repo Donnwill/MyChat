@@ -17,7 +17,7 @@ class _LoginState extends State<Login> {
   String email;
   String password;
 
-  bool isRegister = true;
+  bool isRegisterPageActive = true;
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +145,7 @@ class _LoginState extends State<Login> {
                       );
                       
                     } else {
-                     
+                     //error pop up here
                     }
 
                   }
@@ -189,7 +189,7 @@ class _LoginState extends State<Login> {
                       ),
                       onPressed: () {
                         print('Sign Up');
-                        widget.loginOrRegister(isRegister);
+                        widget.loginOrRegister(isRegisterPageActive);
                       },
                       child: Text('SignUp'),
                     )

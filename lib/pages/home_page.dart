@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:my_chat/helper/authentication.dart';
 import 'package:my_chat/models/users_friends_requests.dart';
 import 'package:my_chat/pages/loginAndRegister/login_register_page.dart';
-import 'package:my_chat/tabPages/friends_tab.dart';
-import 'package:my_chat/tabPages/requests_tab.dart';
+import 'package:my_chat/pages/tabPages/friends_tab.dart';
+import 'package:my_chat/pages/tabPages/requests_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,24 +13,25 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Stream documentStream;
+  Stream usersFriendsSnapshot;
   SharedPreferences prefs;
   UsersFriendsRequests _usersFriendsRequests;
 
   String uid;
   bool loading = true;
+
   @override
   void initState() {
-    getUserData();
+    getUserFriendsData();
     super.initState();
   }
 
-  getUserData() async {
+  getUserFriendsData() async {
     prefs = await SharedPreferences.getInstance();
     uid = prefs.getString("Uid");
     print(uid);
     setState(() {
-      documentStream = FirebaseFirestore.instance.collection('users_friends').doc(uid).snapshots();
+      usersFriendsSnapshot = FirebaseFirestore.instance.collection('users_friends').doc(uid).snapshots();
     });
   }
 
@@ -62,6 +63,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         appBar: AppBar(
           bottom: TabBar(indicatorColor: Colors.white, tabs: [
+            // try to make it a single line code
             Tab(
               text: "CHATS",
             ),
@@ -115,7 +117,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         body: StreamBuilder<DocumentSnapshot>(
-            stream: documentStream,
+            stream: usersFriendsSnapshot,
             builder: (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
               if (snapshot.hasError) {
                 return Container();

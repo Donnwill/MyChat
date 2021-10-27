@@ -9,11 +9,11 @@ class LoginRegisterPage extends StatefulWidget {
 }
 
 class _LoginRegisterPageState extends State<LoginRegisterPage> {
-  bool isRegister = false;
+  bool isRegisterPageActive = false;
 
-  loginOrRegister(bool registerPageActive) {
+  loginOrRegister(bool isRegister) {
     setState(() {
-      isRegister = registerPageActive;
+      isRegisterPageActive = isRegister;
     });
   }
 
@@ -50,7 +50,7 @@ class _LoginRegisterPageState extends State<LoginRegisterPage> {
                       color: Colors.white,
                       borderRadius: BorderRadius.only(topLeft: Radius.circular(25), topRight: Radius.circular(25))),
                   margin: const EdgeInsets.only(top: 60),
-                  child: (!isRegister) ? Login(loginOrRegister) : Register(loginOrRegister)),
+                  child: (!isRegisterPageActive) ? Login(loginOrRegister) : Register(loginOrRegister)),
             )
           ],
         ),
