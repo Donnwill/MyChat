@@ -1,18 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
-
-import 'package:my_chat/models/friends.dart';
-import 'package:my_chat/models/requests.dart';
-
 class Users {
   String userName;
   String email;
   String phoneNumber;
   String dateOfBirth;
   String profilePic;
-  List<Friends> friends;
-  List<Requests> requests;
+ 
 
   Users({
     this.userName,
@@ -20,8 +14,6 @@ class Users {
     this.phoneNumber,
     this.dateOfBirth,
     this.profilePic,
-    this.friends,
-    this.requests,
   });
 
   Users copyWith({
@@ -30,8 +22,6 @@ class Users {
     String phoneNumber,
     String dateOfBirth,
     String profilePic,
-    List<Friends> friends,
-    List<Requests> requests,
   }) {
     return Users(
       userName: userName ?? this.userName,
@@ -39,8 +29,6 @@ class Users {
       phoneNumber: phoneNumber ?? this.phoneNumber,
       dateOfBirth: dateOfBirth ?? this.dateOfBirth,
       profilePic: profilePic ?? this.profilePic,
-      friends: friends ?? this.friends,
-      requests: requests ?? this.requests,
     );
   }
 
@@ -51,8 +39,6 @@ class Users {
       'phoneNumber': phoneNumber,
       'dateOfBirth': dateOfBirth,
       'profilePic': profilePic,
-      'friends': friends?.map((x) => x.toMap())?.toList(),
-      'requests': requests?.map((x) => x.toMap())?.toList(),
     };
   }
 
@@ -63,8 +49,6 @@ class Users {
       phoneNumber: map['phoneNumber'],
       dateOfBirth: map['dateOfBirth'],
       profilePic: map['profilePic'],
-      friends: List<Friends>.from(map['friends']?.map((x) => Friends.fromMap(x))),
-      requests: List<Requests>.from(map['requests']?.map((x) => Requests.fromMap(x))),
     );
   }
 
@@ -74,7 +58,7 @@ class Users {
 
   @override
   String toString() {
-    return 'Users(userName: $userName, email: $email, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, profilePic: $profilePic, friends: $friends, requests: $requests)';
+    return 'Users(userName: $userName, email: $email, phoneNumber: $phoneNumber, dateOfBirth: $dateOfBirth, profilePic: $profilePic)';
   }
 
   @override
@@ -83,22 +67,16 @@ class Users {
   
     return other is Users &&
       other.userName == userName &&
-        other.email == email &&
+      other.email == email &&
         other.phoneNumber == phoneNumber &&
       other.dateOfBirth == dateOfBirth &&
-        other.profilePic == profilePic &&
-        listEquals(other.friends, friends) &&
-        listEquals(other.requests, requests);
+      other.profilePic == profilePic;
   }
 
   @override
   int get hashCode {
     return userName.hashCode ^
-        email.hashCode ^
-        phoneNumber.hashCode ^
-        dateOfBirth.hashCode ^
-        profilePic.hashCode ^
-        friends.hashCode ^
-        requests.hashCode;
+      email.hashCode ^ phoneNumber.hashCode ^ dateOfBirth.hashCode ^
+      profilePic.hashCode;
   }
 }

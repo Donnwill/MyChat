@@ -1,8 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_chat/helper/authentication.dart';
-import 'package:my_chat/models/users.dart';
+import 'package:my_chat/models/users_friends_requests.dart';
 import 'package:my_chat/pages/loginAndRegister/login_register_page.dart';
+import 'package:my_chat/tabPages/friends_tab.dart';
+import 'package:my_chat/tabPages/requests_tab.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -13,7 +15,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   Stream documentStream;
   SharedPreferences prefs;
-  Users users;
+  UsersFriendsRequests _usersFriendsRequests;
 
   String uid;
   bool loading = true;
@@ -28,7 +30,7 @@ class _HomePageState extends State<HomePage> {
     uid = prefs.getString("Uid");
     print(uid);
     setState(() {
-      documentStream = FirebaseFirestore.instance.collection('users').doc(uid).snapshots();
+      documentStream = FirebaseFirestore.instance.collection('users_friends').doc(uid).snapshots();
     });
   }
 
@@ -127,12 +129,15 @@ class _HomePageState extends State<HomePage> {
               }
 
               var value = snapshot.data;
-              users = Users.fromMap(value.data());
-
-              // print(users.friends);
+              _usersFriendsRequests = UsersFriendsRequests.fromMap(value.data());
 
               return TabBarView(
-                  children: <Widget>[Text(users.phoneNumber), Text("Global"), Text("Friends"), Text("Requests")]);
+                  children: <Widget>[
+                Text("Chats"),
+                Text("Global"),
+                FriendsTab(_usersFriendsRequests.friends),
+                RequestsTab(_usersFriendsRequests.requests)
+              ]);
             }),
       ),
     );
