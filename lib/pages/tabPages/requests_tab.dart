@@ -14,31 +14,33 @@ class RequestsTab extends StatefulWidget {
 
 class _RequestsTabState extends State<RequestsTab> {
   SharedPreferences prefs;
-  String uid;
+  String currentUsersUid;
   Users currentUser;
-  DocumentSnapshot documentSnapshot;
 
-  acceptRequest(Requests friendRequest, Users currentUser) async {
-    CollectionReference users = FirebaseFirestore.instance.collection('users_friends');
-    CollectionReference requestedUser = FirebaseFirestore.instance.collection('users_friends');
+  DocumentSnapshot currentUsersSnapshot;
 
-    users.doc(uid).update({
+  CollectionReference userReference;
+
+  acceptRequest(Requests requestedUser, Users currentUser) {
+    userReference = FirebaseFirestore.instance.collection('users_friends');
+
+    userReference.doc(currentUsersUid).update({
       'friends': FieldValue.arrayUnion([
         {
-          "userName": friendRequest.userName,
-          "phoneNumber": friendRequest.phoneNumber,
-          "userUid": friendRequest.userUid,
-          "profilePic": friendRequest.profilePic
+          "userName": requestedUser.userName,
+          "phoneNumber": requestedUser.phoneNumber,
+          "userUid": requestedUser.userUid,
+          "profilePic": requestedUser.profilePic
         }
       ])
     });
 
-    requestedUser.doc(friendRequest.userUid).update({
+    userReference.doc(requestedUser.userUid).update({
       'friends': FieldValue.arrayUnion([
         {
           "userName": currentUser.userName,
           "phoneNumber": currentUser.phoneNumber,
-          "userUid": uid,
+          "userUid": currentUsersUid,
           "profilePic": currentUser.profilePic
         }
       ])
@@ -47,12 +49,12 @@ class _RequestsTabState extends State<RequestsTab> {
 
   getUserData() async {
     prefs = await SharedPreferences.getInstance();
-    uid = prefs.getString("Uid");
-    print(uid);
-    documentSnapshot = await FirebaseFirestore.instance.collection('users').doc(uid).get();
+    currentUsersUid = prefs.getString("Uid");
+    print(currentUsersUid);
+    currentUsersSnapshot = await FirebaseFirestore.instance.collection('users').doc(currentUsersUid).get();
 
     setState(() {
-      currentUser = Users.fromMap(documentSnapshot.data());
+      currentUser = Users.fromMap(currentUsersSnapshot.data());
     });
   }
 
