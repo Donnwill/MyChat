@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
               text: "FRIENDS",
             ),
             Tab(
-              text: "REQUESTS",
+              text: "REQUEST",
             )
           ]),
           actions: [
@@ -133,8 +133,22 @@ class _HomePageState extends State<HomePage> {
 
               return TabBarView(
                   children: <Widget>[
-                Text("Chats"),
-                Text("Global"),
+                Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                          colors: [Color(0xffF5FCFF), Color(0xffDBF3FA)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                    ),
+                    child: Text("Chats")),
+                Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                          colors: [Color(0xffF5FCFF), Color(0xffDBF3FA)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight),
+                    ),
+                    child: Text("Global")),
                 FriendsTab(_usersFriendsRequests.friends),
                 RequestsTab(_usersFriendsRequests.requests)
               ]);
