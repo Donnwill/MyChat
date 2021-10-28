@@ -3,6 +3,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_chat/helper/authentication.dart';
+import 'package:my_chat/helper/custom_container.dart';
 import 'package:my_chat/helper/fade_animation.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:my_chat/models/users.dart';
@@ -118,20 +119,7 @@ class _RegisterState extends State<Register> {
                     style: TextStyle(fontSize: 35, color: Colors.black87, letterSpacing: 2),
                   ),
                 )),
-            FadeAnimation(
-              2,
-              Container(
-                  width: double.infinity,
-                  height: 70,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff006699), width: 1),
-                      boxShadow: const [
-                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+            CustomContainer(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -159,22 +147,9 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ],
-                  )),
+                  ),
             ),
-            FadeAnimation(
-              2,
-              Container(
-                  width: double.infinity,
-                  height: 70,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff006699), width: 1),
-                      boxShadow: const [
-                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+            CustomContainer(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -203,22 +178,9 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ],
-                  )),
+                  ),
             ),
-            FadeAnimation(
-              2,
-              Container(
-                  width: double.infinity,
-                  height: 70,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff006699), width: 1),
-                      boxShadow: const [
-                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+            CustomContainer(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -246,22 +208,9 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ],
-                  )),
+                  ),
             ),
-            FadeAnimation(
-              2,
-              Container(
-                  width: double.infinity,
-                  height: 70,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff006699), width: 1),
-                      boxShadow: const [
-                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(20))),
+            CustomContainer(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
@@ -295,23 +244,10 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ],
-                  )),
+                  ),
             ),
-            FadeAnimation(
-              2,
-              Container(
-                  width: double.infinity,
-                  height: 70,
-                  margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff006699), width: 1),
-                      boxShadow: const [
-                        BoxShadow(color: Color(0xff006699), blurRadius: 10, offset: Offset(1, 1)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(20))),
-                  child: Row(
+            CustomContainer(
+              child: Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Icon(Icons.vpn_key_outlined),
@@ -339,8 +275,9 @@ class _RegisterState extends State<Register> {
                         ),
                       ),
                     ],
-                  )),
+                  ),
             ),
+            
             const SizedBox(
               height: 20,
             ),

@@ -10,14 +10,17 @@ class FriendsTab extends StatefulWidget {
 }
 
 class _FriendsTabState extends State<FriendsTab> {
+  int friendsLength;
   @override
   Widget build(BuildContext context) {
+    friendsLength = widget.friendsList.length;
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
             colors: [Color(0xffF5FCFF), Color(0xffDBF3FA)], begin: Alignment.topLeft, end: Alignment.bottomRight),
       ),
-      child: ListView.builder(
+      child: (friendsLength >= 1)
+            ? ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           var friends = widget.friendsList[index];
           return FadeAnimation(
@@ -57,8 +60,17 @@ class _FriendsTabState extends State<FriendsTab> {
             ),
           );
         },
-        itemCount: widget.friendsList.length,
-      ),
+        itemCount: friendsLength,
+              )
+            : Center(
+                child: Text(
+                  "Add friends to start chatting",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xff00ccff),
+                  ),
+                ),
+              )
     );
   }
 }

@@ -29,7 +29,6 @@ class _HomePageState extends State<HomePage> {
   getUserFriendsData() async {
     prefs = await SharedPreferences.getInstance();
     uid = prefs.getString("Uid");
-    print(uid);
     setState(() {
       usersFriendsSnapshot = FirebaseFirestore.instance.collection('users_friends').doc(uid).snapshots();
     });
