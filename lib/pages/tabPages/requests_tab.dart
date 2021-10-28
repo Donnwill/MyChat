@@ -17,6 +17,8 @@ class _RequestsTabState extends State<RequestsTab> {
   String currentUsersUid;
   Users currentUser;
 
+  int requestLength;
+
   DocumentSnapshot currentUsersSnapshot;
 
   CollectionReference userReference;
@@ -30,7 +32,7 @@ class _RequestsTabState extends State<RequestsTab> {
           "userName": requestedUser.userName,
           "phoneNumber": requestedUser.phoneNumber,
           "userUid": requestedUser.userUid,
-          "profilePic": requestedUser.profilePic
+          "profilePic": (requestedUser.profilePic != "") ? requestedUser.profilePic : ""
         }
       ])
     });
@@ -41,7 +43,7 @@ class _RequestsTabState extends State<RequestsTab> {
           "userName": currentUser.userName,
           "phoneNumber": currentUser.phoneNumber,
           "userUid": currentUsersUid,
-          "profilePic": currentUser.profilePic
+          "profilePic": (currentUser.profilePic != "") ? currentUser.profilePic : ""
         }
       ])
     });
@@ -65,14 +67,17 @@ class _RequestsTabState extends State<RequestsTab> {
 
   @override
   Widget build(BuildContext context) {
+    requestLength = widget.requestsList.length;
     return Container(
       decoration: BoxDecoration(
         gradient: const LinearGradient(
             colors: [Color(0xffF5FCFF), Color(0xffDBF3FA)], begin: Alignment.topLeft, end: Alignment.bottomRight),
       ),
-      child: ListView.builder(
+      child: (requestLength >= 1)
+            ? ListView.builder(
         itemBuilder: (BuildContext context, int index) {
           var requests = widget.requestsList[index];
+
           return FadeAnimation(
             1.5,
             ListTile(
@@ -156,8 +161,17 @@ class _RequestsTabState extends State<RequestsTab> {
             ),
           );
         },
-        itemCount: widget.requestsList.length,
-      ),
+        itemCount: requestLength,
+              )
+            : Center(
+                child: Text(
+                  "You do not have any requests",
+                  style: TextStyle(
+                    fontSize: 15,
+                    color: Color(0xff00ccff),
+                  ),
+                ),
+              )
     );
   }
 }
